@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
-import { BlogGrid } from './components/BlogGrid';
-import { BlogArticleModal } from './components/BlogArticleModal';
-import { YouTubeHub } from './components/YouTubeHub';
-import { AboutSection } from './components/AboutSection';
-import { ContactNewsletter } from './components/ContactNewsletter';
 import { BlogPost, PillarType } from './types';
 import { MOCK_BLOG_POSTS } from './data/mockData';
 import { Sparkles, BookOpen, Video } from 'lucide-react';
+
+const BlogGrid = lazy(() => import('./components/BlogGrid').then(module => ({ default: module.BlogGrid })));
+const BlogArticleModal = lazy(() => import('./components/BlogArticleModal').then(module => ({ default: module.BlogArticleModal })));
+const YouTubeHub = lazy(() => import('./components/YouTubeHub').then(module => ({ default: module.YouTubeHub })));
+const ContactNewsletter = lazy(() => import('./components/ContactNewsletter').then(module => ({ default: module.ContactNewsletter })));
+
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -75,7 +76,7 @@ export default function App() {
                     {/* Render BlogCard */}
                     <div className="group bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">
                       <div className="relative aspect-16/10 overflow-hidden bg-slate-100 dark:bg-slate-900">
-                        <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img src={post.coverImage} alt={post.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-[#FFC300] text-slate-900">
                           {post.pillar.replace('-', ' ').toUpperCase()}
                         </span>
@@ -119,16 +120,20 @@ export default function App() {
                   </button>
                 </div>
 
-                <YouTubeHub
-                  selectedPillar={selectedPillar}
-                  setSelectedPillar={setSelectedPillar}
-                  onNavigateToBlog={() => setActiveTab('blog')}
-                />
+                <Suspense fallback={<div className="h-96 flex items-center justify-center text-slate-500">Loading videos...</div>}>
+                  <YouTubeHub
+                    selectedPillar={selectedPillar}
+                    setSelectedPillar={setSelectedPillar}
+                    onNavigateToBlog={() => setActiveTab('blog')}
+                  />
+                </Suspense>
               </div>
             </div>
 
             {/* Newsletter Subscription Box */}
-            <ContactNewsletter />
+            <Suspense fallback={<div className="h-64" />}>
+              <ContactNewsletter />
+            </Suspense>
 
           </div>
         )}
@@ -136,33 +141,41 @@ export default function App() {
         {/* BLOG VIEW */}
         {activeTab === 'blog' && (
           <div className="animate-fade-in">
-            <BlogGrid
-              selectedPillar={selectedPillar}
-              setSelectedPillar={setSelectedPillar}
-              onSelectPost={handleSelectPost}
-            />
+            <Suspense fallback={<div className="h-screen flex items-center justify-center text-slate-500">Loading blog...</div>}>
+              <BlogGrid
+                selectedPillar={selectedPillar}
+                setSelectedPillar={setSelectedPillar}
+                onSelectPost={handleSelectPost}
+              />
+            </Suspense>
           </div>
         )}
 
         {/* YOUTUBE VIDEOS VIEW */}
         {activeTab === 'videos' && (
           <div className="animate-fade-in">
-            <YouTubeHub
-              selectedPillar={selectedPillar}
-              setSelectedPillar={setSelectedPillar}
-              onNavigateToBlog={() => setActiveTab('blog')}
-            />
+            <Suspense fallback={<div className="h-screen flex items-center justify-center text-slate-500">Loading videos...</div>}>
+              <YouTubeHub
+                selectedPillar={selectedPillar}
+                setSelectedPillar={setSelectedPillar}
+                onNavigateToBlog={() => setActiveTab('blog')}
+              />
+            </Suspense>
           </div>
         )}
 
       </main>
 
       {/* Single Blog Article Full Reader Modal */}
-      <BlogArticleModal
-        post={selectedPost}
-        onClose={() => setSelectedPost(null)}
-        onSelectRelatedPost={handleSelectPost}
-      />
+      <Suspense fallback={null}>
+        {selectedPost && (
+          <BlogArticleModal
+            post={selectedPost}
+            onClose={() => setSelectedPost(null)}
+            onSelectRelatedPost={handleSelectPost}
+          />
+        )}
+      </Suspense>
 
       {/* Footer */}
       <Footer

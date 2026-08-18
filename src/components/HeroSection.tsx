@@ -118,8 +118,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
               >
                 <source src="/animated-logo.webm" type="video/webm" />
                 <source src="/animated-logo-compressed.mp4" type="video/mp4" />
-                {/* Fallback to original if compressed versions fail */}
-                <source src="/animated-logo.mp4" type="video/mp4" />
               </video>
             </div>
 
