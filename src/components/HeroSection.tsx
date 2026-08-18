@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Youtube, Instagram, BookOpen, Sparkles, MapPin, Compass, Play } from 'lucide-react';
 import { useChannelStats } from '../hooks/useChannelStats';
 
@@ -9,6 +9,21 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
   const CHANNEL_STATS = useChannelStats();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Ensure video always plays even on strict mobile browsers/safari
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log("Auto-play was prevented. Re-attempting muted play.", error);
+        });
+      }
+    }
+  }, []);
   return (
     <section className="relative overflow-hidden pt-6 pb-16 lg:pt-12 lg:pb-24">
       
@@ -92,6 +107,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
             {/* Animated Logo Container */}
             <div className="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900 dark:border-slate-700 bg-[#FFC300] transform hover:scale-[1.02] transition-transform duration-300 aspect-video flex items-center justify-center">
               <video 
+                ref={videoRef}
                 autoPlay 
                 loop 
                 muted 
