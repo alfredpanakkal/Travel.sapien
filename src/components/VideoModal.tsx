@@ -48,7 +48,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
           {/* Embedded Player or Preview Box */}
           <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-800">
             <iframe
-              src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1"
+              src={`https://www.youtube-nocookie.com/embed/${video.videoId}?autoplay=1`}
               title={video.title}
               className="w-full h-full border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

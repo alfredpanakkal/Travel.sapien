@@ -389,7 +389,7 @@ export const CHANNEL_STATS = {
   totalViews: '18.4M',
   blogArticles: '86',
   countriesVisited: '48',
-  channelBannerUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1600&q=80',
-  avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
+  channelBannerUrl: '',
+  avatarUrl: '',
   description: 'Welcome to Travel Sapien! We are a nomad family proving that you don’t need a fortune to travel the world. Honest budget breakdowns, family survival tips, hidden gems, and real images auto maticaly from youtube'
 };

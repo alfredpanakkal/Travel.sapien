@@ -83,22 +83,30 @@ export const YouTubeHub: React.FC<YouTubeHubProps> = ({
         
         {/* Banner Cover Image */}
         <div className="w-full aspect-[6.2/1] sm:aspect-[6.2/1] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
-          <img
-            src={CHANNEL_STATS.channelBannerUrl}
-            alt="Travel Sapien Banner"
-            className="w-full h-full object-cover"
-          />
+          {CHANNEL_STATS.channelBannerUrl ? (
+            <img
+              src={CHANNEL_STATS.channelBannerUrl}
+              alt="Travel Sapien Banner"
+              className="w-full h-full object-cover animate-fade-in"
+            />
+          ) : (
+            <div className="w-full h-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+          )}
         </div>
 
         {/* Channel Details Row */}
         <div className="pt-6 sm:pt-6 flex flex-col sm:flex-row items-start justify-between gap-6 px-2 sm:px-4">
           
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left w-full">
-            <img
-              src={CHANNEL_STATS.avatarUrl}
-              alt={CHANNEL_STATS.channelName}
-              className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full object-cover shrink-0"
-            />
+            {CHANNEL_STATS.avatarUrl ? (
+              <img
+                src={CHANNEL_STATS.avatarUrl}
+                alt={CHANNEL_STATS.channelName}
+                className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full object-cover shrink-0 border-4 border-white dark:border-slate-900 animate-fade-in"
+              />
+            ) : (
+              <div className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full shrink-0 border-4 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 animate-pulse" />
+            )}
             
             <div className="space-y-2 pt-2 flex-1">
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
