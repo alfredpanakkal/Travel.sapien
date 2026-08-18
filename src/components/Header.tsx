@@ -142,7 +142,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Menu Backdrop & Drawer */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex flex-col bg-slate-900/60 backdrop-blur-md">
-          <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xl flex flex-col max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-xl flex flex-col max-h-[90vh] overflow-y-auto pb-[calc(1rem+env(safe-area-inset-bottom))]">
             
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <Logo variant="inline" size="md" />

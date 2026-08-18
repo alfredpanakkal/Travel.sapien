@@ -6,10 +6,10 @@ import { BlogPost, PillarType } from './types';
 import { MOCK_BLOG_POSTS } from './data/mockData';
 import { Sparkles, BookOpen, Video } from 'lucide-react';
 
-const BlogGrid = lazy(() => import('./components/BlogGrid').then(module => ({ default: module.BlogGrid })));
-const BlogArticleModal = lazy(() => import('./components/BlogArticleModal').then(module => ({ default: module.BlogArticleModal })));
-const YouTubeHub = lazy(() => import('./components/YouTubeHub').then(module => ({ default: module.YouTubeHub })));
-const ContactNewsletter = lazy(() => import('./components/ContactNewsletter').then(module => ({ default: module.ContactNewsletter })));
+const BlogGrid = lazy(() => import('./components/BlogGrid.tsx').then(module => ({ default: module.BlogGrid })));
+const BlogArticleModal = lazy(() => import('./components/BlogArticleModal.tsx').then(module => ({ default: module.BlogArticleModal })));
+const YouTubeHub = lazy(() => import('./components/YouTubeHub.tsx').then(module => ({ default: module.YouTubeHub })));
+const ContactNewsletter = lazy(() => import('./components/ContactNewsletter.tsx').then(module => ({ default: module.ContactNewsletter })));
 
 
 export default function App() {

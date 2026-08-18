@@ -20,7 +20,7 @@ export const PillarFilter: React.FC<PillarFilterProps> = ({
     <div className={`space-y-4 ${className}`}>
       
       {/* Category Pills Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar scroll-smooth">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar scroll-smooth [-webkit-overflow-scrolling:touch]">
         
         {/* All Button */}
         <button

@@ -60,7 +60,7 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center"
+              className="p-2.5 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Close article"
             >
               <X className="w-6 h-6" />
