@@ -1,0 +1,6 @@
+{
+  "name": "Travel Sapien",
+  "description": "Official Travel Sapien Website — Blog & YouTube Hub featuring Budget Breakdowns, Family Tips, Hidden Gems, and Travel Hacks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-amber: #FFC300;
+    --color-ember: #D95D39;
+    --color-navy: #1E293B;
+    --color-white: #FFFFFF;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  }
+}
+
+.font-freckle {
+  font-family: 'Freckle Face', cursive, display;
+  letter-spacing: 0.02em;
+}
+
+/* Custom Hide Scrollbar for Horizontal Reels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Glows & Shadows */
+.shadow-brand {
+  box-shadow: 0 10px 30px -5px rgba(255, 195, 0, 0.25);
+}
+
+.shadow-brand-dark {
+  box-shadow: 0 10px 30px -5px rgba(30, 41, 59, 0.5);
+}
+
+.shadow-ember {
+  box-shadow: 0 10px 25px -5px rgba(217, 93, 57, 0.3);
+}
+
+/* Smooth Page Transitions */
+html {
+  scroll-behavior: smooth;
+}
+
