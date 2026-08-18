@@ -19,6 +19,8 @@ async function startServer() {
       let subscribers = "0";
       let videos = "0";
       let name = "Travel Sapien";
+      let avatarUrl = "";
+      let channelBannerUrl = "";
       
       const subFallback = html.match(/(\d+(?:\.\d+)?[KM]?)\s+subscribers?/i);
       if (subFallback) subscribers = subFallback[1];
@@ -29,10 +31,49 @@ async function startServer() {
       const nameMatch = html.match(/<title>(.*?) - YouTube<\/title>/);
       if (nameMatch) name = nameMatch[1];
       
+      // Extract images from ytInitialData
+      const jsonMatch = html.match(/var ytInitialData = (\{.*?\});/);
+      if (jsonMatch) {
+        try {
+          const data = JSON.parse(jsonMatch[1]);
+          const header = data.header;
+          
+          let avatarUrls = [];
+          let bannerUrls = [];
+          
+          function findUrls(obj) {
+            if (typeof obj === 'string') {
+              if (obj.includes('yt3.googleusercontent.com') || obj.includes('yt3.ggpht.com')) {
+                if (obj.includes('=s')) avatarUrls.push(obj);
+                if (obj.includes('=w')) bannerUrls.push(obj);
+              }
+            } else if (typeof obj === 'object' && obj !== null) {
+              for (const key in obj) {
+                if (key === 'url' && typeof obj[key] === 'string' && (obj[key].includes('yt3.googleusercontent.com') || obj[key].includes('yt3.ggpht.com'))) {
+                  if (obj[key].includes('=s')) avatarUrls.push(obj[key]);
+                  if (obj[key].includes('=w')) bannerUrls.push(obj[key]);
+                } else {
+                  findUrls(obj[key]);
+                }
+              }
+            }
+          }
+          findUrls(header);
+          
+          // Get highest res available
+          if (avatarUrls.length > 0) avatarUrl = avatarUrls[avatarUrls.length - 1];
+          if (bannerUrls.length > 0) channelBannerUrl = bannerUrls[bannerUrls.length - 1];
+        } catch (e) {
+          console.error("Error parsing ytInitialData", e);
+        }
+      }
+      
       res.json({
         subscribers,
         totalVideos: videos,
-        channelName: name
+        channelName: name,
+        avatarUrl,
+        channelBannerUrl
       });
     } catch (error) {
       console.error("Error fetching YouTube stats:", error);

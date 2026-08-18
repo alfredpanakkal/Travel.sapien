@@ -78,64 +78,58 @@ export const YouTubeHub: React.FC<YouTubeHubProps> = ({
   return (
     <section className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
-      {/* Channel Header Branding Banner */}
-      <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white border border-slate-800 shadow-2xl">
+      {/* Channel Header Branding Banner - YouTube Native Style */}
+      <div className="flex flex-col mb-4">
         
         {/* Banner Cover Image */}
-        <div className="relative h-44 sm:h-56 w-full overflow-hidden">
+        <div className="w-full aspect-[6.2/1] sm:aspect-[6.2/1] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
           <img
             src={CHANNEL_STATS.channelBannerUrl}
             alt="Travel Sapien Banner"
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
         </div>
 
         {/* Channel Details Row */}
-        <div className="p-6 sm:p-8 -mt-16 sm:-mt-20 relative z-10 flex flex-col sm:flex-row items-center sm:items-end justify-between gap-6">
+        <div className="pt-6 sm:pt-6 flex flex-col sm:flex-row items-start justify-between gap-6 px-2 sm:px-4">
           
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left w-full">
             <img
               src={CHANNEL_STATS.avatarUrl}
               alt={CHANNEL_STATS.channelName}
-              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-[#FFC300] object-cover shadow-xl shrink-0"
+              className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full object-cover shrink-0"
             />
-            <div className="space-y-1">
-              <div className="flex items-center justify-center sm:justify-start gap-2">
-                <h2 className="font-freckle text-2xl sm:text-4xl text-white">
-                  {CHANNEL_STATS.channelName}
-                </h2>
-                <span className="p-1 bg-[#D95D39] text-white rounded-md text-xs">
-                  <Youtube className="w-4 h-4" />
-                </span>
-              </div>
+            
+            <div className="space-y-2 pt-2 flex-1">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                {CHANNEL_STATS.channelName}
+              </h2>
               
-              <div className="text-xs text-slate-400 font-sans flex items-center justify-center sm:justify-start gap-2">
-                <span className="font-bold text-amber-400">{CHANNEL_STATS.channelHandle}</span>
-                <span>•</span>
-                <span className="font-bold text-white">{CHANNEL_STATS.subscribers} subscribers</span>
-                <span>•</span>
+              <div className="text-sm text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center sm:items-start sm:gap-2">
+                <span className="font-semibold text-slate-900 dark:text-white">{CHANNEL_STATS.channelHandle}</span>
+                <span className="hidden sm:inline">•</span>
+                <span>{CHANNEL_STATS.subscribers} subscribers</span>
+                <span className="hidden sm:inline">•</span>
                 <span>{CHANNEL_STATS.totalVideos} videos</span>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-300 max-w-xl line-clamp-2 pt-1 font-sans">
+              <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl line-clamp-2 mt-2">
                 {CHANNEL_STATS.description}
               </p>
+
+              <div className="pt-4 flex justify-center sm:justify-start">
+                <a
+                  href={CHANNEL_STATS.channelUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
+                >
+                  Subscribe
+                </a>
+              </div>
             </div>
           </div>
-
-          {/* Subscribe CTA */}
-          <a
-            href={CHANNEL_STATS.channelUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#D95D39] hover:bg-[#c24f2e] text-white font-extrabold text-sm shadow-xl transition-transform active:scale-95 shrink-0"
-          >
-            <Youtube className="w-5 h-5" />
-            <span>Subscribe Free</span>
-            <ExternalLink className="w-4 h-4 opacity-70" />
-          </a>
-
+          
         </div>
 
       </div>
