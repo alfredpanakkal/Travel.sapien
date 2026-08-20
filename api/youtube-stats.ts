@@ -1,10 +1,10 @@
 export default async function handler(req: any, res: any) {
   const fallbackData = {
-    subscribers: "142.5K",
-    totalVideos: "248",
+    subscribers: "0",
+    totalVideos: "0",
     channelName: "Travel Sapien",
-    avatarUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=300&q=80",
-    channelBannerUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1600&q=80"
+    avatarUrl: "https://images.unsplash.com/photo-1506869640319-fea1a27536d1?auto=format&fit=crop&w=300&q=80",
+    channelBannerUrl: "https://images.unsplash.com/photo-1454391304352-2bf4678b1a7a?auto=format&fit=crop&w=1600&q=80"
   };
 
   try {

@@ -82,12 +82,12 @@ export const YouTubeHub: React.FC<YouTubeHubProps> = ({
       <div className="flex flex-col mb-4">
         
         {/* Banner Cover Image */}
-        <div className="w-full aspect-[6.2/1] sm:aspect-[6.2/1] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+        <div className="w-full aspect-[6.2/1] sm:aspect-[6.2/1] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-sm group">
           {CHANNEL_STATS.channelBannerUrl ? (
             <img
               src={CHANNEL_STATS.channelBannerUrl}
               alt="Travel Sapien Banner"
-              className="w-full h-full object-cover animate-fade-in"
+              className="w-full h-full object-cover animate-fade-in group-hover:scale-[1.02] transition-transform duration-700 ease-out"
             />
           ) : (
             <div className="w-full h-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
@@ -102,7 +102,7 @@ export const YouTubeHub: React.FC<YouTubeHubProps> = ({
               <img
                 src={CHANNEL_STATS.avatarUrl}
                 alt={CHANNEL_STATS.channelName}
-                className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full object-cover shrink-0 border-4 border-white dark:border-slate-900 animate-fade-in"
+                className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full object-cover shrink-0 border-4 border-white dark:border-slate-900 shadow-xl hover:scale-105 transition-transform duration-300 ease-out animate-fade-in"
               />
             ) : (
               <div className="w-32 h-32 sm:w-[160px] sm:h-[160px] rounded-full shrink-0 border-4 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 animate-pulse" />

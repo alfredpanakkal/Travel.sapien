@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Logo } from './Logo';
 import { useChannelStats } from '../hooks/useChannelStats';
 import { Youtube, Instagram, Mail, ArrowUp, Heart, Globe, Shield, Sparkles } from 'lucide-react';
+import { LegalModal } from './LegalModal';
 
 interface FooterProps {
   setActiveTab: (tab: string) => void;
@@ -10,6 +11,8 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ setActiveTab, setSelectedPillar }) => {
   const CHANNEL_STATS = useChannelStats();
+  const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | null>(null);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -55,7 +58,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, setSelectedPillar 
                 <Instagram className="w-5 h-5" />
               </a>
               <a 
-                href="mailto:contact@travelsapien.com" 
+                href="mailto:capt.alfred@outlook.com" 
                 className="p-2.5 bg-slate-200 hover:bg-[#FFC300] dark:bg-slate-800 dark:hover:bg-[#FFC300] text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-900 rounded-xl transition-colors duration-200"
                 aria-label="Email Us"
               >
@@ -143,10 +146,10 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, setSelectedPillar 
           <p>© {new Date().getFullYear()} Travel Sapien. All rights reserved. Travel. Discover. Live.</p>
           
           <div className="flex items-center gap-6">
-            <button onClick={() => handleNav('home')} className="hover:text-slate-800 dark:hover:text-slate-300 transition-colors">
+            <button onClick={() => setLegalModalType('privacy')} className="hover:text-slate-800 dark:hover:text-slate-300 transition-colors">
               Privacy Policy
             </button>
-            <button onClick={() => handleNav('home')} className="hover:text-slate-800 dark:hover:text-slate-300 transition-colors">
+            <button onClick={() => setLegalModalType('terms')} className="hover:text-slate-800 dark:hover:text-slate-300 transition-colors">
               Terms of Service
             </button>
             <button 
@@ -161,6 +164,12 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, setSelectedPillar 
         </div>
 
       </div>
+
+      <LegalModal 
+        isOpen={legalModalType !== null} 
+        type={legalModalType} 
+        onClose={() => setLegalModalType(null)} 
+      />
     </footer>
   );
 };

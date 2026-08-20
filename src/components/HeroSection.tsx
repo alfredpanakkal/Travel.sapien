@@ -1,6 +1,7 @@
 import React from 'react';
 import { Youtube, Instagram, BookOpen, Sparkles, MapPin, Compass } from 'lucide-react';
 import { useChannelStats } from '../hooks/useChannelStats';
+import { AnimatedCounter } from './AnimatedCounter';
 
 interface HeroSectionProps {
   setActiveTab: (tab: string) => void;
@@ -75,7 +76,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
             {/* Quick Badges */}
             <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
               <span className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-rose-500" /> {CHANNEL_STATS.countriesVisited} Countries Logged
+                <Youtube className="w-4 h-4 text-rose-500" /> <AnimatedCounter value={CHANNEL_STATS.totalVideos} /> YouTube Videos
               </span>
               <span className="flex items-center gap-1.5">
                 <Compass className="w-4 h-4 text-emerald-500" /> 100% Real Receipts
@@ -110,7 +111,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
               </div>
               <div>
                 <div className="font-freckle text-base leading-tight">Sail With Us</div>
-                <div className="text-[11px] font-sans font-bold text-slate-800">{CHANNEL_STATS.subscribers}+ Sapien Crew</div>
+                <div className="text-[11px] font-sans font-bold text-slate-800"><AnimatedCounter value={CHANNEL_STATS.subscribers} />+ Sapien Crew</div>
               </div>
             </div>
 
@@ -119,11 +120,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
         </div>
 
         {/* Live Channel Stats Bar */}
-        <div className="mt-16 pt-8 border-t border-slate-200/80 dark:border-slate-800 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div className="mt-16 pt-8 border-t border-slate-200/80 dark:border-slate-800 grid grid-cols-2 gap-6 text-center">
           
           <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-xs">
             <div className="font-freckle text-3xl sm:text-4xl text-[#D95D39] dark:text-[#FFC300]">
-              {CHANNEL_STATS.subscribers}
+              <AnimatedCounter value={CHANNEL_STATS.subscribers} />
             </div>
             <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1">
               YouTube Subscribers
@@ -132,28 +133,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
 
           <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-xs">
             <div className="font-freckle text-3xl sm:text-4xl text-slate-900 dark:text-white">
-              {CHANNEL_STATS.totalVideos}
+              <AnimatedCounter value={CHANNEL_STATS.totalVideos} />
             </div>
             <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1">
               Videos & Shorts
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-xs">
-            <div className="font-freckle text-3xl sm:text-4xl text-slate-900 dark:text-white">
-              {CHANNEL_STATS.blogArticles}
-            </div>
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1">
-              Detailed Budget Guides
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-xs">
-            <div className="font-freckle text-3xl sm:text-4xl text-emerald-600 dark:text-emerald-400">
-              {CHANNEL_STATS.countriesVisited}
-            </div>
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1">
-              Countries Visited
             </div>
           </div>
 
