@@ -9,6 +9,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
   const CHANNEL_STATS = useChannelStats();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -93,14 +94,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
             
             {/* Animated Logo Container */}
             <div 
-              onClick={() => setIsPlaying(!isPlaying)}
-              onMouseEnter={() => setIsPlaying(true)}
-              onMouseLeave={() => setIsPlaying(false)}
+              onClick={() => {
+                if (videoRef.current) {
+                  if (videoRef.current.paused) {
+                    videoRef.current.play().catch(() => {});
+                  } else {
+                    videoRef.current.pause();
+                  }
+                }
+              }}
               className="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900 dark:border-slate-700 bg-[#FFC300] transform hover:scale-[1.02] transition-transform duration-300 aspect-video flex items-center justify-center cursor-pointer group"
             >
-              <img 
-                src={isPlaying ? "/animated-logo.gif" : "/animated-logo-poster.jpg"}
-                alt="Animated Logo"
+              <video 
+                ref={videoRef}
+                src="/animated-logo.mp4"
+                loop 
+                muted 
+                autoPlay
+                playsInline
+                preload="metadata"
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
                 className="w-full h-full object-cover"
               />
 

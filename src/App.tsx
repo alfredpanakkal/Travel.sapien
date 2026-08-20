@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
@@ -19,8 +19,36 @@ export default function App() {
 
   const { posts } = useBlogPosts();
 
+  // Deep linking for Blog Article Modal
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#article-')) {
+        const slug = hash.replace('#article-', '');
+        const post = posts.find(p => p.slug === slug);
+        if (post) setSelectedPost(post);
+      } else {
+        setSelectedPost(null);
+      }
+    };
+
+    if (posts.length > 0) {
+      handleHashChange();
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [posts]);
+
   const handleSelectPost = (post: BlogPost) => {
     setSelectedPost(post);
+    window.location.hash = `#article-${post.slug}`;
+  };
+
+  const handleClosePost = () => {
+    setSelectedPost(null);
+    // Remove hash without scrolling to top
+    history.pushState('', document.title, window.location.pathname + window.location.search);
   };
 
   return (
@@ -54,7 +82,7 @@ export default function App() {
                   <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#D95D39]">
                     <BookOpen className="w-4 h-4" /> Latest Published Guides
                   </div>
-                  <h2 className="font-freckle text-3xl text-slate-900 dark:text-white mt-0.5">
+                  <h2 className="font-freckle text-3xl text-slate-900 dark:text-slate-100 mt-0.5">
                     Itemized Cost Breakdowns & Travel Hacks
                   </h2>
                 </div>
@@ -64,7 +92,7 @@ export default function App() {
                     setActiveTab('blog');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-100 dark:bg-slate-800 hover:bg-[#FFC300] text-slate-900 dark:text-amber-300 dark:hover:text-slate-900 font-bold text-xs transition-colors self-start sm:self-auto"
+                  className="inline-flex items-center gap-2 px-4 py-3 sm:py-2 rounded-xl bg-amber-100 dark:bg-slate-800 hover:bg-[#FFC300] text-slate-900 dark:text-amber-300 dark:hover:text-slate-900 font-bold text-xs transition-colors self-start sm:self-auto"
                 >
                   <span>View All 85+ Guides</span>
                   <span>➔</span>
@@ -85,7 +113,7 @@ export default function App() {
                       </div>
                       <div className="p-6 space-y-2">
                         <div className="text-xs text-slate-400 font-semibold">{post.readTime} • {post.publishedAt}</div>
-                        <h3 className="font-freckle text-xl text-slate-900 dark:text-white group-hover:text-[#D95D39] transition-colors leading-snug">
+                        <h3 className="font-freckle text-xl text-slate-900 dark:text-slate-100 group-hover:text-[#D95D39] transition-colors leading-snug">
                           {post.title}
                         </h3>
                         <p className="text-slate-600 dark:text-slate-300 text-xs line-clamp-2">
@@ -106,7 +134,7 @@ export default function App() {
                     <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D95D39] dark:text-amber-400">
                       <Video className="w-4 h-4 text-[#D95D39]" /> YouTube Channel
                     </div>
-                    <h2 className="font-freckle text-3xl sm:text-4xl text-slate-900 dark:text-white mt-1">
+                    <h2 className="font-freckle text-3xl sm:text-4xl text-slate-900 dark:text-slate-100 mt-1">
                       Sunday Vlogs & Daily Shorts
                     </h2>
                   </div>
@@ -116,7 +144,7 @@ export default function App() {
                       setActiveTab('videos');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="px-5 py-2.5 rounded-xl bg-[#D95D39] hover:bg-[#c24f2e] text-white font-bold text-xs transition-colors"
+                    className="px-5 py-3 sm:py-2.5 rounded-xl bg-[#D95D39] hover:bg-[#c24f2e] text-white font-bold text-xs transition-colors"
                   >
                     Explore YouTube Hub ➔
                   </button>
@@ -173,7 +201,7 @@ export default function App() {
         {selectedPost && (
           <BlogArticleModal
             post={selectedPost}
-            onClose={() => setSelectedPost(null)}
+            onClose={handleClosePost}
             onSelectRelatedPost={handleSelectPost}
           />
         )}
