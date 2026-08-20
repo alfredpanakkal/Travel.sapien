@@ -9,28 +9,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
   const CHANNEL_STATS = useChannelStats();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  // Setup video mute (required for programmatic play in some browsers)
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.defaultMuted = true;
-      video.muted = true;
-    }
-  }, []);
-
-  const togglePlay = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (video.paused) {
-      video.play().then(() => setIsPlaying(true)).catch(() => {});
-    } else {
-      video.pause();
-      setIsPlaying(false);
-    }
-  };
 
   return (
     <section className="relative overflow-hidden pt-6 pb-16 lg:pt-12 lg:pb-24">
@@ -114,35 +93,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
             
             {/* Animated Logo Container */}
             <div 
-              onClick={togglePlay}
-              onMouseEnter={() => {
-                if (videoRef.current) {
-                  videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
-                }
-              }}
-              onMouseLeave={() => {
-                if (videoRef.current) {
-                  videoRef.current.pause();
-                  setIsPlaying(false);
-                }
-              }}
+              onClick={() => setIsPlaying(!isPlaying)}
+              onMouseEnter={() => setIsPlaying(true)}
+              onMouseLeave={() => setIsPlaying(false)}
               className="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900 dark:border-slate-700 bg-[#FFC300] transform hover:scale-[1.02] transition-transform duration-300 aspect-video flex items-center justify-center cursor-pointer group"
             >
-              <video 
-                ref={videoRef}
-                loop 
-                muted 
-                playsInline
-                preload="auto"
-                poster="/animated-logo-poster.jpg"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
+              <img 
+                src={isPlaying ? "/animated-logo.gif" : "/animated-logo-poster.jpg"}
+                alt="Animated Logo"
                 className="w-full h-full object-cover"
-                style={{ backgroundImage: "url('/animated-logo-poster.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}
-              >
-                <source src="/animated-logo-compressed.mp4" type="video/mp4" />
-                <source src="/animated-logo.webm" type="video/webm" />
-              </video>
+              />
 
               {/* Play / Pause Interactive Overlay Badge */}
               <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white p-2 rounded-xl border border-slate-700/80 shadow-md opacity-80 group-hover:opacity-100 transition-opacity">
