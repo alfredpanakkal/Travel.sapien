@@ -143,7 +143,10 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, setSelectedPillar 
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Travel Sapien. All rights reserved. Travel. Discover. Live.</p>
+          <div className="flex flex-col gap-1 text-center sm:text-left">
+            <p>© {new Date().getFullYear()} Travel Sapien. All rights reserved. Travel. Discover. Live.</p>
+            <p className="text-blue-500 font-medium">Latest Update : 20 08 2026 01:33</p>
+          </div>
           
           <div className="flex items-center gap-6">
             <button onClick={() => setLegalModalType('privacy')} className="hover:text-slate-800 dark:hover:text-slate-300 transition-colors">
