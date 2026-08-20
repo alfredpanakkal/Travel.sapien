@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Youtube, Instagram, BookOpen, Sparkles, MapPin, Compass, Play, Pause } from 'lucide-react';
+import React from 'react';
+import { Youtube, Instagram, BookOpen, Sparkles, MapPin, Compass } from 'lucide-react';
 import { useChannelStats } from '../hooks/useChannelStats';
 
 interface HeroSectionProps {
@@ -9,8 +9,6 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
   const CHANNEL_STATS = useChannelStats();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   return (
     <section className="relative overflow-hidden pt-6 pb-16 lg:pt-12 lg:pb-24">
@@ -93,47 +91,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ setActiveTab }) => {
           <div className="lg:col-span-5 relative">
             
             {/* Animated Logo Container */}
-            <div 
-              onClick={() => {
-                if (videoRef.current) {
-                  if (videoRef.current.paused) {
-                    videoRef.current.play().catch(() => {});
-                  } else {
-                    videoRef.current.pause();
-                  }
-                }
-              }}
-              className="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900 dark:border-slate-700 bg-[#FFC300] transform hover:scale-[1.02] transition-transform duration-300 aspect-video flex items-center justify-center cursor-pointer group"
-            >
+            <div className="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900 dark:border-slate-700 bg-[#FFC300] transform hover:scale-[1.02] transition-transform duration-300 aspect-video flex items-center justify-center group">
               <video 
-                ref={videoRef}
                 src="/animated-logo.mp4"
                 loop 
                 muted 
                 autoPlay
                 playsInline
                 preload="metadata"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
                 className="w-full h-full object-cover"
               />
-
-              {/* Play / Pause Interactive Overlay Badge */}
-              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white p-2 rounded-xl border border-slate-700/80 shadow-md opacity-80 group-hover:opacity-100 transition-opacity">
-                {isPlaying ? (
-                  <Pause className="w-4 h-4 text-amber-400" />
-                ) : (
-                  <Play className="w-4 h-4 text-amber-400 fill-amber-400" />
-                )}
-              </div>
-
-              {!isPlaying && (
-                <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-[2px] flex items-center justify-center">
-                  <div className="p-4 rounded-full bg-[#D95D39] text-white shadow-xl transform scale-100 group-hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 fill-white" />
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Floating Sailboat Badge */}
