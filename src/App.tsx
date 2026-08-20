@@ -3,7 +3,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
 import { BlogPost, PillarType } from './types';
-import { MOCK_BLOG_POSTS } from './data/mockData';
+import { useBlogPosts } from './hooks/useBlogPosts';
 import { Sparkles, BookOpen, Video } from 'lucide-react';
 
 const BlogGrid = lazy(() => import('./components/BlogGrid.tsx').then(module => ({ default: module.BlogGrid })));
@@ -16,6 +16,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
   const [selectedPillar, setSelectedPillar] = useState<PillarType | null>(null);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+
+  const { posts } = useBlogPosts();
 
   const handleSelectPost = (post: BlogPost) => {
     setSelectedPost(post);
@@ -71,7 +73,7 @@ export default function App() {
 
               {/* Blog Cards Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {MOCK_BLOG_POSTS.slice(0, 3).map((post) => (
+                {posts.slice(0, 3).map((post) => (
                   <div key={post.id} onClick={() => handleSelectPost(post)}>
                     {/* Render BlogCard */}
                     <div className="group bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer transform hover:-translate-y-1">

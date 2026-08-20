@@ -5,10 +5,14 @@ export function useChannelStats() {
   const [stats, setStats] = useState(INITIAL_STATS);
 
   useEffect(() => {
+    let isMounted = true;
     fetch('/api/youtube-stats')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then(data => {
-        if (!data.error) {
+        if (isMounted && data && !data.error) {
           setStats(prev => ({
             ...prev,
             subscribers: data.subscribers || prev.subscribers,
@@ -18,7 +22,13 @@ export function useChannelStats() {
           }));
         }
       })
-      .catch(err => console.error("Failed to load channel stats", err));
+      .catch(() => {
+        // Silently preserve initial stats if network error occurs
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return stats;

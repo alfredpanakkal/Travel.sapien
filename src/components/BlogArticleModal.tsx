@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BlogPost } from '../types';
 import { BRAND_PILLARS, MOCK_YOUTUBE_VIDEOS, MOCK_BLOG_POSTS } from '../data/mockData';
-import { X, Clock, Calendar, User, Share2, Youtube, AlertCircle, Lightbulb, DollarSign, ShieldAlert, Heart, MessageSquare, Send, Check } from 'lucide-react';
+import { X, Clock, Calendar, User, Share2, Youtube, AlertCircle, Lightbulb, DollarSign, ShieldAlert, Heart, MessageSquare, Send, Check, Twitter, Facebook, Link as LinkIcon } from 'lucide-react';
 
 interface BlogArticleModalProps {
   post: BlogPost | null;
@@ -177,6 +177,40 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
               </div>
             </div>
           )}
+
+          {/* Social Sharing Component */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-y border-slate-100 dark:border-slate-800">
+            <div className="font-freckle text-xl text-slate-900 dark:text-white">
+              Share this guide
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] transition-colors text-sm font-bold"
+              >
+                <Twitter className="w-4 h-4" />
+                <span>Twitter / X</span>
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4267B2]/10 hover:bg-[#4267B2]/20 text-[#4267B2] transition-colors text-sm font-bold"
+              >
+                <Facebook className="w-4 h-4" />
+                <span>Facebook</span>
+              </a>
+              <button
+                onClick={handleCopyLink}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-sm font-bold"
+              >
+                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <LinkIcon className="w-4 h-4" />}
+                <span>{copied ? 'Copied!' : 'Copy Link'}</span>
+              </button>
+            </div>
+          </div>
 
           {/* Author Bio Footer */}
           <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-start gap-4">

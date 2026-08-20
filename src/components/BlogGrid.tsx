@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { BlogPost, PillarType } from '../types';
-import { MOCK_BLOG_POSTS, CHANNEL_STATS } from '../data/mockData';
+import { CHANNEL_STATS } from '../data/mockData';
+import { useBlogPosts } from '../hooks/useBlogPosts';
 import { BlogCard } from './BlogCard';
 import { PillarFilter } from './PillarFilter';
-import { Search, Sparkles, Filter, SlidersHorizontal } from 'lucide-react';
+import { Search, Sparkles, Filter, SlidersHorizontal, Loader2 } from 'lucide-react';
 
 interface BlogGridProps {
   selectedPillar: PillarType | null;
@@ -19,9 +20,11 @@ export const BlogGrid: React.FC<BlogGridProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'popular'>('newest');
 
+  const { posts, loading, usingMock } = useBlogPosts();
+
   // Filtered & Sorted Posts
   const filteredPosts = useMemo(() => {
-    let result = [...MOCK_BLOG_POSTS];
+    let result = [...posts];
 
     // Pillar filter
     if (selectedPillar) {
