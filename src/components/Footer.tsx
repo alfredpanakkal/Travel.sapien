@@ -145,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, setSelectedPillar 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex flex-col gap-1 text-center sm:text-left">
             <p>© {new Date().getFullYear()} Travel Sapien. All rights reserved. Travel. Discover. Live.</p>
-            <p className="text-[#FFC300] font-medium">Latest Update : 20 08 2026 01:33</p>
+            <p className="text-[#FFC300] font-medium">Latest Update : {__BUILD_DATE__}</p>
           </div>
           
           <div className="flex items-center gap-6">
