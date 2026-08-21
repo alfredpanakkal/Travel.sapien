@@ -40,37 +40,31 @@ export function mapPostDoc(doc: any): BlogPost {
 }
 
 export async function fetchBlogPosts(signal?: AbortSignal): Promise<BlogPost[]> {
-  if (!sanityClient) return [];
-  const query = `*[_type == "post"] | order(publishedAt desc) {
-    ...,
-    author->
-  }`;
   try {
-    const docs = await sanityClient.fetch(query, {}, { signal });
-    return docs.map(mapPostDoc);
-  } catch (error: any) {
-    console.warn("Direct Sanity fetch failed (likely CORS). Falling back to proxy.", error.message);
     const res = await fetch('/api/sanity/posts', { signal });
     if (!res.ok) throw new Error('Proxy fetch failed');
     const docs = await res.json();
     return docs.map(mapPostDoc);
+  } catch (error: any) {
+    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+      throw error;
+    }
+    console.error("Failed to fetch blog posts from proxy:", error.message);
+    throw error;
   }
 }
 
 export async function fetchBlogPostBySlug(slug: string, signal?: AbortSignal): Promise<BlogPost | null> {
-  if (!sanityClient) return null;
-  const query = `*[_type == "post" && slug.current == $slug][0] {
-    ...,
-    author->
-  }`;
   try {
-    const doc = await sanityClient.fetch(query, { slug }, { signal });
-    return doc ? mapPostDoc(doc) : null;
-  } catch (error: any) {
-    console.warn("Direct Sanity fetch failed (likely CORS). Falling back to proxy.", error.message);
     const res = await fetch(`/api/sanity/posts/${slug}`, { signal });
     if (!res.ok) throw new Error('Proxy fetch failed');
     const doc = await res.json();
     return doc ? mapPostDoc(doc) : null;
+  } catch (error: any) {
+    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+      throw error;
+    }
+    console.error("Failed to fetch blog post from proxy:", error.message);
+    throw error;
   }
 }
