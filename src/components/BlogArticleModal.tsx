@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BlogPost } from '../types';
 import { BRAND_PILLARS, MOCK_YOUTUBE_VIDEOS, MOCK_BLOG_POSTS } from '../data/mockData';
-import { X, Clock, Calendar, User, Share2, Youtube, AlertCircle, Lightbulb, DollarSign, ShieldAlert, Heart, MessageSquare, Send, Check, Twitter, Facebook, Link as LinkIcon } from 'lucide-react';
+import { SEO } from './SEO';
+import { Sparkles, X, Clock, Calendar, User, Share2, Youtube, AlertCircle, Lightbulb, DollarSign, ShieldAlert, Heart, MessageSquare, Send, Check, Twitter, Facebook, Link as LinkIcon } from 'lucide-react';
 
 interface BlogArticleModalProps {
   post: BlogPost | null;
@@ -33,8 +34,39 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
     setTimeout(() => setCopied(false), 2500);
   };
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "abstract": post.excerpt,
+    "image": [post.coverImage],
+    "datePublished": new Date(post.publishedAt).toISOString(),
+    "dateModified": new Date(post.publishedAt).toISOString(),
+    "author": [{
+        "@type": "Person",
+        "name": post.author?.name || "Travel Sapien",
+        "url": "https://travel-sapien.vercel.app"
+      }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Travel Sapien",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://images.unsplash.com/photo-1506869640319-fea1a27536d1?auto=format&fit=crop&w=300&q=80"
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fade-in">
+      <SEO 
+        title={post.title} 
+        description={post.excerpt} 
+        type="article"
+        image={post.coverImage}
+        url={`https://travel-sapien.vercel.app/blog/${post.slug}`}
+        schema={articleSchema}
+      />
       
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden my-auto">
         
@@ -69,10 +101,10 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
         </div>
 
         {/* Scrollable Article Content Body */}
-        <div className="overflow-y-auto p-6 sm:p-8 lg:p-10 space-y-8">
+        <article className="overflow-y-auto p-6 sm:p-8 lg:p-10 space-y-8">
           
           {/* Article Header & Title */}
-          <div className="space-y-4">
+          <header className="space-y-4">
             <h1 className="font-freckle text-3xl sm:text-4xl lg:text-5xl text-slate-900 dark:text-white leading-tight">
               {post.title}
             </h1>
@@ -106,7 +138,7 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
                 </span>
               </div>
             </div>
-          </div>
+          </header>
 
           {/* Cover Hero Image */}
           <div className="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 aspect-16/9 bg-slate-100 dark:bg-slate-950">
@@ -116,6 +148,19 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
               className="w-full h-full object-cover"
             />
           </div>
+
+          {/* AI Bot & Reader TL;DR / Key Takeaways Box */}
+          <section aria-labelledby="tldr-heading" className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 shadow-sm space-y-3">
+            <div className="flex items-center gap-2 font-bold text-sm uppercase tracking-wide text-emerald-800 dark:text-emerald-400">
+              <Sparkles className="w-4 h-4" />
+              <h2 id="tldr-heading" className="text-sm m-0 p-0 font-bold">Key Takeaways (TL;DR)</h2>
+            </div>
+            <ul className="space-y-2 list-disc pl-5 text-emerald-900 dark:text-emerald-100 text-sm md:text-base leading-relaxed font-medium">
+              <li>{post.excerpt}</li>
+              {post.calloutBox?.content && <li>{post.calloutBox.content}</li>}
+              <li>Detailed budget breakdown and family survival tips included below.</li>
+            </ul>
+          </section>
 
           {/* Callout Box if Present */}
           {post.calloutBox && (
@@ -134,15 +179,22 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
           )}
 
           {/* Body Text Content */}
-          <div className="space-y-6 text-slate-800 dark:text-slate-200 text-base sm:text-lg leading-relaxed font-sans">
-            {post.body.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          <section className="space-y-6 text-slate-800 dark:text-slate-200 text-base sm:text-lg leading-relaxed font-sans">
+            {post.body.map((paragraph, index) => {
+              // Convert pseudo headings to actual h2/h3 tags for bots if they start with bold/hash
+              if (paragraph.startsWith('## ')) {
+                return <h2 key={index} className="text-2xl font-freckle mt-8 mb-4 text-slate-900 dark:text-white">{paragraph.replace('## ', '')}</h2>;
+              }
+              if (paragraph.startsWith('### ')) {
+                return <h3 key={index} className="text-xl font-bold mt-6 mb-3 text-slate-800 dark:text-slate-100">{paragraph.replace('### ', '')}</h3>;
+              }
+              return <p key={index}>{paragraph}</p>;
+            })}
+          </section>
 
           {/* Related YouTube Vlog Box */}
           {relatedVideo && (
-            <div className="p-6 rounded-3xl bg-slate-900 text-white space-y-4 shadow-xl border border-slate-800">
+            <aside aria-label="Related YouTube Vlog" className="p-6 rounded-3xl bg-slate-900 text-white space-y-4 shadow-xl border border-slate-800">
               <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
                 <Youtube className="w-4 h-4 text-[#D95D39]" />
                 <span>Watch The Companion Vlog</span>
@@ -175,7 +227,7 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
                   </a>
                 </div>
               </div>
-            </div>
+            </aside>
           )}
 
           {/* Social Sharing Component */}
@@ -213,7 +265,7 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
           </div>
 
           {/* Author Bio Footer */}
-          <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-start gap-4">
+          <footer className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-start gap-4">
             <img
               src={post.author.avatar}
               alt={post.author.name}
@@ -230,7 +282,7 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
                 {post.author.bio}
               </p>
             </div>
-          </div>
+          </footer>
 
           {/* Related Articles Section */}
           {relatedPosts.length > 0 && (
@@ -255,7 +307,7 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
             </div>
           )}
 
-        </div>
+        </article>
 
       </div>
 

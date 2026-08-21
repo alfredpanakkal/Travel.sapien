@@ -5,7 +5,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import { createServer as createViteServer } from "vite";
 import youtubeStatsHandler from "./api/youtube-stats.js";
-import { postsHandler, postBySlugHandler } from "./api/sanity-proxy.js";
+import { postsHandler, postBySlugHandler, proxySanityClient } from "./api/sanity-proxy.js";
 
 async function startServer() {
   const app = express();
@@ -73,6 +73,40 @@ async function startServer() {
   app.get("/api/youtube-stats", youtubeStatsHandler);
   app.get("/api/sanity/posts", postsHandler);
   app.get("/api/sanity/posts/:slug", postBySlugHandler);
+
+  // SEO & Bot Routes
+  app.get("/robots.txt", (req, res) => {
+    res.type("text/plain");
+    res.send(`User-agent: *\nAllow: /\nSitemap: https://travel-sapien.vercel.app/sitemap.xml`);
+  });
+
+  app.get("/sitemap.xml", async (req, res) => {
+    try {
+      const query = `*[_type == "post"] | order(publishedAt desc) { "slug": slug.current, publishedAt }`;
+      const docs = await proxySanityClient.fetch(query);
+      
+      let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+      sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+      
+      // Home page
+      sitemap += `  <url>\n    <loc>https://travel-sapien.vercel.app/</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+      
+      // Blog posts
+      docs.forEach((doc: any) => {
+        if (doc.slug) {
+          sitemap += `  <url>\n    <loc>https://travel-sapien.vercel.app/blog/${doc.slug}</loc>\n    <lastmod>${doc.publishedAt.split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+        }
+      });
+      
+      sitemap += `</urlset>`;
+      
+      res.header('Content-Type', 'application/xml');
+      res.send(sitemap);
+    } catch (error) {
+      console.error("Sitemap error:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

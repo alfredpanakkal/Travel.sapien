@@ -2,8 +2,10 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HeroSection } from './components/HeroSection';
+import { SEO } from './components/SEO';
 import { BlogPost, PillarType } from './types';
 import { useBlogPosts } from './hooks/useBlogPosts';
+import { MOCK_FAQS, CHANNEL_STATS, MOCK_TEAM } from './data/mockData';
 import { Sparkles, BookOpen, Video } from 'lucide-react';
 
 const BlogGrid = lazy(() => import('./components/BlogGrid.tsx').then(module => ({ default: module.BlogGrid })));
@@ -18,6 +20,41 @@ export default function App() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   const { posts } = useBlogPosts();
+
+  // 1. E-E-A-T Organization & Person Schema
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": CHANNEL_STATS.channelName,
+    "url": "https://travel-sapien.vercel.app",
+    "logo": CHANNEL_STATS.avatarUrl,
+    "sameAs": [
+      CHANNEL_STATS.channelUrl,
+      CHANNEL_STATS.instagramUrl
+    ],
+    "description": CHANNEL_STATS.description,
+    "founder": MOCK_TEAM.map(member => ({
+      "@type": "Person",
+      "name": member.name,
+      "jobTitle": member.role,
+      "image": member.image,
+      "description": member.bio
+    }))
+  };
+
+  // 2. FAQ Schema for AI Bots
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": MOCK_FAQS.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
 
   // Deep linking for Blog Article Modal
   useEffect(() => {
@@ -53,6 +90,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-amber-50/30 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+      <SEO schema={[organizationSchema, faqSchema]} />
       
       {/* Top Header & Sticky Navigation */}
       <Header
