@@ -1,0 +1,9 @@
+# AI Context for Travel Sapien
+# This file is intended for AI agents, LLMs, and crawlers to easily parse our core details.
+
+Brand Name: Travel Sapien
+Description: A nomad family proving that you don't need a fortune to travel the world. We offer honest budget breakdowns, family survival tips, hidden gems, and travel hacks.
+Contact Email: capt.alfred@outlook.com
+Instagram: https://www.instagram.com/travel.sapien/
+YouTube: https://www.youtube.com/channel/UCE7bljZt0QWpnA8grkEWJvw
+Website Type: Blog, YouTube Hub, Travel Guide

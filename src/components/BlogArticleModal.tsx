@@ -36,17 +36,18 @@ export const BlogArticleModal: React.FC<BlogArticleModalProps> = ({
 
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "TravelAdvisory",
+    "name": post.title,
+    "description": post.excerpt,
     "headline": post.title,
     "abstract": post.excerpt,
     "image": [post.coverImage],
     "datePublished": new Date(post.publishedAt).toISOString(),
     "dateModified": new Date(post.publishedAt).toISOString(),
-    "author": [{
-        "@type": "Person",
-        "name": post.author?.name || "Travel Sapien",
-        "url": "https://travel-sapien.vercel.app"
-      }],
+    "author": {
+      "@type": "Organization",
+      "name": "Travel Sapien"
+    },
     "publisher": {
       "@type": "Organization",
       "name": "Travel Sapien",
