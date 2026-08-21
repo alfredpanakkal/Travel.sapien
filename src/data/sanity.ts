@@ -41,14 +41,20 @@ export function mapPostDoc(doc: any): BlogPost {
 
 export async function fetchBlogPosts(signal?: AbortSignal): Promise<BlogPost[]> {
   if (!sanityClient) return [];
-  const query = `*[_type == "post"] | order(publishedAt desc)`;
+  const query = `*[_type == "post"] | order(publishedAt desc) {
+    ...,
+    author->
+  }`;
   const docs = await sanityClient.fetch(query, {}, { signal });
   return docs.map(mapPostDoc);
 }
 
 export async function fetchBlogPostBySlug(slug: string, signal?: AbortSignal): Promise<BlogPost | null> {
   if (!sanityClient) return null;
-  const query = `*[_type == "post" && slug.current == $slug][0]`;
+  const query = `*[_type == "post" && slug.current == $slug][0] {
+    ...,
+    author->
+  }`;
   const doc = await sanityClient.fetch(query, { slug }, { signal });
   return doc ? mapPostDoc(doc) : null;
 }
