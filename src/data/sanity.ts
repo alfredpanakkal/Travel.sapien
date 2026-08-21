@@ -1,7 +1,7 @@
 import { createClient } from '@sanity/client';
 import type { BlogPost, PillarType } from '../types';
 
-const projectId = import.meta.env.VITE_SANITY_PROJECT_ID;
+const projectId = import.meta.env.VITE_SANITY_PROJECT_ID || 'g0khk2re';
 const dataset = import.meta.env.VITE_SANITY_DATASET || 'production';
 
 export const sanityClient = projectId ? createClient({
@@ -45,8 +45,16 @@ export async function fetchBlogPosts(signal?: AbortSignal): Promise<BlogPost[]> 
     ...,
     author->
   }`;
-  const docs = await sanityClient.fetch(query, {}, { signal });
-  return docs.map(mapPostDoc);
+  try {
+    const docs = await sanityClient.fetch(query, {}, { signal });
+    return docs.map(mapPostDoc);
+  } catch (error: any) {
+    console.warn("Direct Sanity fetch failed (likely CORS). Falling back to proxy.", error.message);
+    const res = await fetch('/api/sanity/posts', { signal });
+    if (!res.ok) throw new Error('Proxy fetch failed');
+    const docs = await res.json();
+    return docs.map(mapPostDoc);
+  }
 }
 
 export async function fetchBlogPostBySlug(slug: string, signal?: AbortSignal): Promise<BlogPost | null> {
@@ -55,6 +63,14 @@ export async function fetchBlogPostBySlug(slug: string, signal?: AbortSignal): P
     ...,
     author->
   }`;
-  const doc = await sanityClient.fetch(query, { slug }, { signal });
-  return doc ? mapPostDoc(doc) : null;
+  try {
+    const doc = await sanityClient.fetch(query, { slug }, { signal });
+    return doc ? mapPostDoc(doc) : null;
+  } catch (error: any) {
+    console.warn("Direct Sanity fetch failed (likely CORS). Falling back to proxy.", error.message);
+    const res = await fetch(`/api/sanity/posts/${slug}`, { signal });
+    if (!res.ok) throw new Error('Proxy fetch failed');
+    const doc = await res.json();
+    return doc ? mapPostDoc(doc) : null;
+  }
 }

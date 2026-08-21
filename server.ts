@@ -5,6 +5,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import { createServer as createViteServer } from "vite";
 import youtubeStatsHandler from "./api/youtube-stats.js";
+import { postsHandler, postBySlugHandler } from "./api/sanity-proxy.js";
 
 async function startServer() {
   const app = express();
@@ -70,6 +71,8 @@ async function startServer() {
 
   // API Routes
   app.get("/api/youtube-stats", youtubeStatsHandler);
+  app.get("/api/sanity/posts", postsHandler);
+  app.get("/api/sanity/posts/:slug", postBySlugHandler);
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
